@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=XR Animator
+Exec=xranimator
+Icon=io.github.butzyung.xranimator
+Type=Application
+Categories=Graphics;Utility;
+Terminal=false

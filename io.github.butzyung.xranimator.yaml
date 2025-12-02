@@ -9,28 +9,45 @@ base-version: "25.08"
 command: xranimator
 
 finish-args:
-  - --socket=wayland
   - --socket=pulseaudio
   - --device=dri
-  - --socket=fallback-x11
+  - --socket=x11 # Base XR Animator only functions on X11, completely unsuitable for wayland via current codebase
   - --share=network # Access Network (Needed for VMC)
   - --share=ipc # Improves X11 performance
+  - --filesystem=xdg-videos:ro # Filesystem access for user file imports
+  - --filesystem=xdg-pictures:ro # Similarly
   - --talk-name=org.kde.StatusNotifierWatcher # Tray functionalities on KDE
   - --system-talk-name=org.freedesktop.NetworkManager
   - --talk-name=com.canonical.AppMenu.Registrar
   - --device=all # Needed for GPU acceleration and the webcam
   - --filesystem=xdg-run/pipewire-0 # Pipewire interfacing
-  - --filesystem=~/.steam # Needed for SteamOS integration, as the XDG OpenURL portal doesn't work properly in Game Mode. 
+  - --filesystem=~/.steam # Needed for SteamOS integration, as the XDG OpenURL portal doesn't work properly in Game Mode.
   #We only need ~/.steam/steam.pipe but Flatpak can't correctly mount just that: 'File "/home/deck/.steam/steam.pipe" has unsupported type 0o10000'
   - --env=XCURSOR_PATH=/run/host/user-share/icons:/run/host/share/icons # This is used to show the correct cursor on Wayland
 
+# We'll grab the electron app and compiled libraries from the zip for now
+# This is the wrong way to do this FIXME
 modules:
+  - name: xranimator-electron
+    buildsystem: simple
+    build-commands:
+      - mkdir -p tmp_extract
+      - bsdtar -xf XR-Animator_v0.33.0_linux-x64.zip -C tmp_extract
+      - mkdir -p /app/bin/xranimator-electron
+      - cp -av "tmp_extract/XR Animator - electron-v33.2.0-linux-x64_SA/." /app/bin/xranimator-electron/
+      - rm -rf tmp_extract
+    sources:
+      - type: file
+        url: https://github.com/ButzYung/SystemAnimatorOnline/releases/download/XR-Animator_v0.33.0/XR-Animator_v0.33.0_linux-x64.zip
+        sha256: 0246ac535fbcc0e02a3969d0a1ce7055d68d3e2c8e24b4d4097da86625c87679
+
   - name: XRAnimator
     buildsystem: simple
     build-commands:
-      - install -Dm755 run.sh /app/bin/xranimator # Install launcher wrapper
+      - install -Dm755 xranimator.sh /app/bin/xranimator # Install launcher wrapper
       - install -Dm644 io.github.butzyung.xranimator.desktop /app/share/applications/io.github.butzyung.xranimator.desktop # Install .desktop for normal linux functionality
       - install -Dm644 icon.png /app/share/icons/hicolor/512x512/apps/io.github.butzyung.xranimator.png # Literal legend
+      - chmod +x /app/bin/xranimator-electron/electron
       - mkdir -p /app/share/xranimator #Install entire upstream repo
       - cp -a . /app/share/xranimator
 
@@ -39,6 +56,8 @@ modules:
         url: https://github.com/ButzYung/SystemAnimatorOnline
         branch: master
       - type: file
-        path: run.sh
+        path: xranimator.sh
       - type: file
         path: io.github.butzyung.xranimator.desktop
+      - type: file
+        path: icon.png

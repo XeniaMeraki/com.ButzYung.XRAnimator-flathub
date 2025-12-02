@@ -43,6 +43,7 @@ modules:
       - type: archive
         url: https://github.com/ButzYung/SystemAnimatorOnline/releases/download/XR-Animator_v0.33.0/XR-Animator_v0.33.0_linux-x64.zip
         sha256: 0246ac535fbcc0e02a3969d0a1ce7055d68d3e2c8e24b4d4097da86625c87679
+        no-extract: true
       - type: file
         path: run.sh
       - type: file

@@ -10,10 +10,9 @@ command: xranimator
 
 finish-args:
   - --socket=wayland
-  - --socket=pipewire
+  - --socket=pulseaudio
   - --device=dri
   - --socket=fallback-x11
-  - --socket=fallback-pulseaudio
   - --share=network # Access Network (Needed for VMC)
   - --share=ipc # Improves X11 performance
   - --talk-name=org.kde.StatusNotifierWatcher # Tray functionalities on KDE

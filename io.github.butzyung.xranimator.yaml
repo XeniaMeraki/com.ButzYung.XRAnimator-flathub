@@ -1,7 +1,7 @@
 id: io.github.butzyung.xranimator
 
 runtime: org.freedesktop.Platform
-runtime-version: &runtime-version "25.08"
+runtime-version: "25.08"
 sdk: org.freedesktop.Sdk
 
 base: org.electronjs.Electron2.BaseApp

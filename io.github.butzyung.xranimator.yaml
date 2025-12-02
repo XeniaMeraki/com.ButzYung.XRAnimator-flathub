@@ -32,10 +32,8 @@ modules:
     buildsystem: simple
     build-commands:
       - mkdir -p /app/bin/xranimator # Make our directory
-      - unzip XR-Animator_v0.33.0_linux-x64.zip -d tmp_extract # Unzip and extract to a temp location
-      - mv tmp_extract/* /app/bin/xranimator/ # Move all contents to our final location
+      - unzip XR-Animator_v0.33.0_linux-x64.zip -d /app/bin/xranimator # Unzip and extract
       - chmod +x "/app/bin/xranimator/XR Animator - electron-v33.2.0-linux-x64_SA/electron" # Make the electron executable, quotes needed for spaces in filename
-      - rm -rf tmp_extract # Clean up
       - install -Dm644 io.github.butzyung.xranimator.desktop /app/share/applications/io.github.butzyung.xranimator.desktop # Install .desktop for normal linux functionality
       - install -Dm644 icon.png /app/share/icons/hicolor/512x512/apps/io.github.butzyung.xranimator.png # L-l-l-l-l-literal legend
       - install -Dm755 run.sh /app/bin/xranimator # Install launcher wrapper
@@ -43,7 +41,6 @@ modules:
       - type: archive
         url: https://github.com/ButzYung/SystemAnimatorOnline/releases/download/XR-Animator_v0.33.0/XR-Animator_v0.33.0_linux-x64.zip
         sha256: 0246ac535fbcc0e02a3969d0a1ce7055d68d3e2c8e24b4d4097da86625c87679
-        no-extract: true
       - type: file
         path: run.sh
       - type: file
